@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basketball Higher or Lower</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <!-- need to refactor so all of these are in different pages-->
+    <div id="setup-screen">
+        <h1>Basketballordle</h1>
+        <h2>Test your basketball knowledge in the following categories:</h2>
+        <div class="stat-buttons">
+            <button onclick="startGame('Points')">Points</button>
+            <button onclick="startGame('Assists')">Assists</button>
+            <button onclick="startGame('Rebounds')">Rebounds</button>
+        </div>
+    </div>
+
+    <div id="game-screen">
+        <div class="score">Score: <span id="score">0</span></div>
+        
+        <div class="players">
+            <div class="player-card left" id="player1-card">
+                <h3 id="player1-name">Player 1</h3>
+                <div class="stat-label">has</div>
+                <div class="stat-value" id="player1-stat-value" style="display: block;">0</div>
+                <div class="stat-description" id="stat-description">career points</div>
+            </div>
+            
+            <div class="vs-divider">VS</div>
+            
+            <div class="player-card right" id="player2-card">
+                <h3 id="player2-name">Player 2</h3>
+                <div class="guess-section">
+                    <button class="choice-btn higher" onclick="makeGuess('higher')">▲ HIGHER</button>
+                    <button class="choice-btn lower" onclick="makeGuess('lower')">▼ LOWER</button>
+                </div>
+                <div class="stat-value" id="player2-stat-value" style="display: none; margin-top: 2rem;">???</div>
+            </div>
+        </div>
+        
+        <div id="result-message"></div>
+        <button id="quit-btn" onclick="quitGame()">Quit Game</button>
+    </div>
+
+    <div id="gameover-screen">
+        <h2>Game Over!</h2>
+        <p>I guess you didn't know as much about basketball as you thought you did...</p>
+        <p>Final Score</p>
+        <p><span id="final-score"></span></p>
+        <p id="final-stats"></p>
+        <button onclick="location.reload()">Play Again</button>
+    </div>
+
+    <script src="/static/game.js"></script>
+</body>
+</html>

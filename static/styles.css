@@ -1,0 +1,376 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: sans-serif;
+    background: #000;
+    min-height: 100vh;
+    overflow-x: hidden;
+    color: white;
+}
+
+/* Setup Screen */
+#setup-screen {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('background_1.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+#setup-screen h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+#setup-screen h2 {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    font-weight: 300;
+}
+
+.stat-buttons {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.stat-buttons button {
+    padding: 1.5rem 3rem;
+    font-size: 1.3rem;
+    font-weight: bold;
+    border: 3px solid white;
+    background: transparent;
+    color: white;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.stat-buttons button:hover {
+    background: white;
+    color: #667eea;
+    transform: scale(1.05);
+}
+
+/* Game Screen - Split Layout */
+#game-screen {
+    display: none;
+    position: relative;
+    min-height: 100vh;
+}
+
+.score {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    font-size: 2.5rem;
+    font-weight: bold;
+    background:transparent;
+    padding: 15px 40px;
+    border-radius: 50px;
+    z-index: 100;
+    color: #FFD700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.players {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+}
+
+.player-card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    padding: 2rem;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Overlay */
+.player-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+.player-card > * {
+    position: relative;
+    z-index: 2;
+}
+
+.player-card.left {
+    background-color: #1a1a2e;
+}
+
+.player-card.right {
+    background-color: #16213e;
+    cursor: pointer;
+}
+
+/* Slide animations */
+@keyframes slideRightToLeft {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-100%);
+    }
+}
+
+@keyframes slideInFromRight {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+.slide-right-to-left {
+    animation: slideRightToLeft 0.6s ease-in-out forwards;
+}
+
+.slide-in-from-right {
+    animation: slideInFromRight 0.6s ease-in-out forwards;
+}
+
+.fade-out {
+    animation: fadeOut 0.3s ease-out forwards;
+}
+
+.player-card h3 {
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+    margin-top: 0;
+    text-align: center;
+    text-shadow: 3px 3px 10px rgba(0,0,0,0.8);
+    font-weight: bold;
+    text-transform: uppercase;
+    position: absolute;
+    top: 10vh;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+}
+
+.stat-label {
+    font-size: 1.2rem;
+    color: #ccc;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.stat-value {
+    font-size: 5rem;
+    font-weight: bold;
+    color: #FFD700;
+    text-shadow: 3px 3px 15px rgba(0,0,0,0.9);
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.stat-description {
+    font-size: 1.3rem;
+    color: #fff;
+    margin-top: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.guess-section {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
+}
+
+.guess-label {
+    font-size: 1.5rem;
+    color: #fff;
+    text-align: center;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.choice-btn {
+    padding: 1.5rem 3rem;
+    font-size: 1.3rem;
+    font-weight: bold;
+    border: 3px solid white;
+    background: transparent;
+    color: white;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    min-width: 250px;
+}
+
+.choice-btn:hover {
+    background: white;
+    color: #333;
+    transform: scale(1.05);
+}
+
+.choice-btn.higher {
+    border-color: white;
+    color: white;
+}
+
+.choice-btn.higher:hover {
+    background: white;
+    color: #333;
+}
+
+.choice-btn.lower {
+    border-color: white;
+    color: white;
+}
+
+.choice-btn.lower:hover {
+    background: white;
+    color: #333;
+}
+
+.vs-divider {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 100px;
+    height: 100px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #000;
+    z-index: 50;
+    box-shadow: 0 0 30px rgba(0,0,0,0.5);
+}
+
+.vs {
+    display: flex; 
+}
+
+#quit-btn {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0.8rem 2rem;
+    background: rgba(255,255,255,0.1);
+    color: white;
+    border: 2px solid white;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.3s;
+    z-index: 100;
+}
+
+#quit-btn:hover {
+    background: rgba(255,255,255,0.3);
+}
+
+/* Game Over Screen */
+#gameover-screen {
+    display: none;
+    min-height: 100vh;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('background_2.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+#gameover-screen h2 {
+    font-size: 4rem;
+    margin-bottom: 2rem;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+}
+
+#gameover-screen p {
+    font-size: 1.5rem;
+    margin: 1rem 0;
+}
+
+#final-score {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #FFD700;
+}
+
+#gameover-screen button {
+    margin-top: 2rem;
+    padding: 1.5rem 3rem;
+    font-size: 1.3rem;
+    font-weight: bold;
+    border: 3px solid white;
+    background: transparent;
+    color: white;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-transform: uppercase;
+}
+
+#gameover-screen button:hover {
+    background: white;
+    color: #333;
+    transform: scale(1.05);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .players {
+        flex-direction: column;
+    }
+    
+    .player-card h3 {
+        font-size: 2rem;
+    }
+    
+    .choice-btn {
+        font-size: 1.3rem;
+        padding: 1rem 2.5rem;
+    }
+}

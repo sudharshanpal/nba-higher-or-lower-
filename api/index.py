@@ -154,7 +154,6 @@ def submit_guess(request: GuessRequest):
         }
 
 
-@app.get("/")
 @app.get("/api")
 def read_root():
     return {"message": "Basketball Ordle API", "status": "running"}

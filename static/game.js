@@ -1,6 +1,18 @@
-const API_URL = 'http://localhost:5000/api';
+const API_URL = window.location.hostname === 'localhost' 
+    ? 'http://localhost:5000/api' 
+    : '/api';
 
-let sessionId = null;
+let gameState = {
+    player1_id: null,
+    player1_name: null,
+    player1_stats: null,
+    player2_id: null,
+    player2_name: null,
+    player2_stats: null,
+    stat_type: null,
+    score: 0
+};
+
 let currentPlayer1Id = null;
 let currentPlayer2Id = null;
 
@@ -100,7 +112,18 @@ async function startGame(statType) {
         
         console.log('Game started with data:', data);
         
-        sessionId = data.session_id;
+        // Store game state locally
+        gameState = {
+            player1_id: data.player1_id,
+            player1_name: data.player1,
+            player1_stats: data.player1_stats,
+            player2_id: data.player2_id,
+            player2_name: data.player2,
+            player2_stats: data.player2_stats,
+            stat_type: data.stat_type,
+            score: data.score
+        };
+        
         currentPlayer1Id = data.player1_id;
         currentPlayer2Id = data.player2_id;
         
@@ -132,7 +155,14 @@ async function makeGuess(choice) {
             },
             body: JSON.stringify({
                 guess: guess,
-                session_id: sessionId
+                player1_id: gameState.player1_id,
+                player1_name: gameState.player1_name,
+                player1_stats: gameState.player1_stats,
+                player2_id: gameState.player2_id,
+                player2_name: gameState.player2_name,
+                player2_stats: gameState.player2_stats,
+                stat_type: gameState.stat_type,
+                score: gameState.score
             })
         });
         
@@ -144,6 +174,17 @@ async function makeGuess(choice) {
         document.getElementById('player2-stat-value').style.display = 'block';
         
         if (data.correct) {
+            // Update game state
+            gameState = {
+                player1_id: data.player1_id,
+                player1_name: data.player1,
+                player1_stats: data.player1_stats,
+                player2_id: data.player2_id,
+                player2_name: data.player2,
+                player2_stats: data.player2_stats,
+                stat_type: gameState.stat_type,
+                score: data.score
+            };
             
             const newPlayer2Id = data.player2_id;
             await preloadPlayerImage(newPlayer2Id);
@@ -151,11 +192,10 @@ async function makeGuess(choice) {
             const player1Card = document.getElementById('player1-card');
             const player2Card = document.getElementById('player2-card');
             
-            
             document.getElementById('player1-name').textContent = data.player1;
             document.getElementById('player1-stat-value').textContent = data.player1_stat_value.toLocaleString();
             
-            const statTypeText = data.stat_type ? data.stat_type.replace('total_', '') : 'points';
+            const statTypeText = gameState.stat_type ? gameState.stat_type.replace('total_', '') : 'points';
             document.getElementById('stat-description').textContent = `career ${statTypeText}`;
             
             currentPlayer1Id = data.player1_id;
@@ -183,7 +223,7 @@ async function makeGuess(choice) {
                 document.getElementById('game-screen').style.display = 'none';
                 document.getElementById('gameover-screen').style.display = 'flex';
                 document.getElementById('final-score').textContent = data.score;
-                document.getElementById('final-stats').textContent = ''; 
+                document.getElementById('final-stats').textContent = '';
             }, 1200);  
         }
         
@@ -200,25 +240,10 @@ async function quitGame() {
         return;
     }
     
-    try {
-        const response = await fetch(`${API_URL}/quit-game`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ session_id: sessionId })
-        });
-        
-        const data = await response.json();
-        
-        document.getElementById('game-screen').style.display = 'none';
-        document.getElementById('gameover-screen').style.display = 'flex';
-        document.getElementById('final-score').textContent = data.score;
-        document.getElementById('final-stats').textContent = ''; 
-        
-    } catch (error) {
-        console.error('Error quitting game:', error);
-    }
+    document.getElementById('game-screen').style.display = 'none';
+    document.getElementById('gameover-screen').style.display = 'flex';
+    document.getElementById('final-score').textContent = gameState.score;
+    document.getElementById('final-stats').textContent = '';
 }
 
 function updateGameUI(data) {
@@ -258,4 +283,22 @@ function updateGameUI(data) {
     } else {
         console.error('currentPlayer2Id is not set!');
     }
+}
+
+function restartGame() {
+    document.getElementById('gameover-screen').style.display = 'none';
+    document.getElementById('setup-screen').style.display = 'flex';
+    
+    gameState = {
+        player1_id: null,
+        player1_name: null,
+        player1_stats: null,
+        player2_id: null,
+        player2_name: null,
+        player2_stats: null,
+        stat_type: null,
+        score: 0
+    };
+    currentPlayer1Id = null;
+    currentPlayer2Id = null;
 }

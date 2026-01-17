@@ -1,0 +1,3 @@
+fastapi
+nba_api
+python-dotenv

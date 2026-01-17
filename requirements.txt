@@ -1,4 +1,3 @@
 fastapi
-mangum
 nba_api
 python-dotenv

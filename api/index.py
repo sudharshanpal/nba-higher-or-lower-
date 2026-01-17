@@ -4,7 +4,6 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from nba_api.stats.endpoints import commonplayerinfo, playercareerstats
 from nba_api.stats.static import players
-from mangum import Mangum
 import random
 import os
 
@@ -159,7 +158,3 @@ def submit_guess(request: GuessRequest):
 @app.get("/api")
 def read_root():
     return {"message": "Basketball Ordle API", "status": "running"}
-
-
-# Export handler for Vercel
-handler = Mangum(app, lifespan="off")

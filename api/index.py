@@ -5,6 +5,7 @@ from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from nba_api.stats.endpoints import commonplayerinfo, playercareerstats
 from nba_api.stats.static import players
+from mangum import Mangum
 import random
 import os
 
@@ -168,6 +169,5 @@ def read_root():
     return {"message": "Basketball Ordle API"}
 
 
-# Vercel handler using Mangum
-from mangum import Mangum
-handler = Mangum(app)
+# Export handler for Vercel
+handler = Mangum(app, lifespan="off")

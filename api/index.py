@@ -1,7 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from nba_api.stats.endpoints import commonplayerinfo, playercareerstats
 from nba_api.stats.static import players
@@ -18,11 +17,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-# Mount static files
-static_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "static")
-if os.path.exists(static_dir):
-    app.mount("/static", StaticFiles(directory=static_dir), name="static")
 
 
 def get_random_active_player_id():
@@ -162,11 +156,9 @@ def submit_guess(request: GuessRequest):
 
 
 @app.get("/")
+@app.get("/api")
 def read_root():
-    static_index = os.path.join(os.path.dirname(os.path.dirname(__file__)), "static", "index.html")
-    if os.path.exists(static_index):
-        return FileResponse(static_index)
-    return {"message": "Basketball Ordle API"}
+    return {"message": "Basketball Ordle API", "status": "running"}
 
 
 # Export handler for Vercel

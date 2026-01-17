@@ -168,5 +168,6 @@ def read_root():
     return {"message": "Basketball Ordle API"}
 
 
-# Vercel requires the app to be exported
-handler = app
+# Vercel handler using Mangum
+from mangum import Mangum
+handler = Mangum(app)

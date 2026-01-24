@@ -26,7 +26,44 @@ app.add_middleware(
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-sessions = {}  
+sessions = {}
+
+
+# Serve individual static files from root
+@app.get("/styles.css")
+def get_styles():
+    if os.path.exists('styles.css'):
+        return FileResponse('styles.css')
+    elif os.path.exists('static/styles.css'):
+        return FileResponse('static/styles.css')
+    raise HTTPException(status_code=404, detail="styles.css not found")
+
+
+@app.get("/game.js")
+def get_game_js():
+    if os.path.exists('game.js'):
+        return FileResponse('game.js')
+    elif os.path.exists('static/game.js'):
+        return FileResponse('static/game.js')
+    raise HTTPException(status_code=404, detail="game.js not found")
+
+
+@app.get("/background_1.jpeg")
+def get_bg1():
+    if os.path.exists('background_1.jpeg'):
+        return FileResponse('background_1.jpeg')
+    elif os.path.exists('static/background_1.jpeg'):
+        return FileResponse('static/background_1.jpeg')
+    raise HTTPException(status_code=404, detail="background_1.jpeg not found")
+
+
+@app.get("/background_2.jpeg")
+def get_bg2():
+    if os.path.exists('background_2.jpeg'):
+        return FileResponse('background_2.jpeg')
+    elif os.path.exists('static/background_2.jpeg'):
+        return FileResponse('static/background_2.jpeg')
+    raise HTTPException(status_code=404, detail="background_2.jpeg not found")  
 
 def get_random_active_player_id():
     active_players = players.get_active_players()
@@ -214,7 +251,13 @@ def quit_game(request: QuitGameRequest):
 
 @app.get("/")
 def read_root():
-    return FileResponse('static/index.html')
+    # Check if index.html is in root or static folder
+    if os.path.exists('index.html'):
+        return FileResponse('index.html')
+    elif os.path.exists('static/index.html'):
+        return FileResponse('static/index.html')
+    else:
+        raise HTTPException(status_code=404, detail="index.html not found")
 
 
 if __name__ == '__main__':
